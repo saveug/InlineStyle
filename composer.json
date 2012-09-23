@@ -15,11 +15,7 @@
         "php": ">=5.3.3",
         "symfony/css-selector": ">=2.1.0-RC1"
     },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.*"
-    },
     "autoload": {
         "psr-0": { "InlineStyle": "" }
-    },
-    "minimum-stability": "dev"
+    }
 }
