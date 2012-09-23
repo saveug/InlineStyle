@@ -23,7 +23,8 @@ class InlineStyleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->basedir = __DIR__."/testfiles";
-        $this->object = new InlineStyle($this->basedir."/test.html");
+        $this->object = new InlineStyle();
+        $this->object->loadHTMLFile($this->basedir."/test.html");
     }
 
     /**
