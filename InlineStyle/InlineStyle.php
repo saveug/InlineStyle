@@ -311,7 +311,7 @@ class InlineStyle
     {
         foreach($styleB as $prop => $val) {
             if(!isset($styleA[$prop])
-                || substr(str_replace(" ", "", strtolower($styleA[$prop])), -10) !== "!important")
+                || substr(str_replace(" ", "", strtolower($val)), -10) == "!important")
             {
                 $styleA[$prop] = $val;
             }
