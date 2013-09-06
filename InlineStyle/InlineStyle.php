@@ -288,6 +288,7 @@ class InlineStyle
         $styles = array();
         $style = trim(trim($style), ";");
         if($style) {
+	    $style = preg_replace('/\n/', ' ', $style);
             foreach(explode(";", $style) as $props) {
                 $props = trim(trim($props), ";");
                 //Don't parse empty props
