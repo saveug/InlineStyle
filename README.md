@@ -58,4 +58,4 @@ After calling applyStylesheet various times the resulting HTML can be retrieved 
 
     $html = $htmldoc->getHTML();
 
-#+++
+#---#+++
