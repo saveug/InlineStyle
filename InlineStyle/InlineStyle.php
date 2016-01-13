@@ -252,21 +252,18 @@ class InlineStyle
 
     public function sortSelectorsOnSpecificity($parsed)
     {
-        usort($parsed, array($this, 'sortOnSpecificity'));
-        return $parsed;
-    }
+        $first = array();
+        $second = array();
+        $third = array();
 
-    private function sortOnSpecificity($a, $b)
-    {
-        $a = $this->getScoreForSelector($a[0]);
-        $b = $this->getScoreForSelector($b[0]);
-
-        foreach (range(0, 2) as $i) {
-            if ($a[$i] !== $b[$i]) {
-                return $a[$i] < $b[$i] ? -1 : 1;
-            }
+        foreach( $parsed as $selector ) {
+            $result = $this->getScoreForSelector($selector[0]);
+            if ( $result[0] > 0 ) $first[] = $selector;
+            if ( $result[1] > 0 ) $second[] = $selector;
+            if ( $result[2] > 0 ) $third[] = $selector;
         }
-        return 0;
+
+        return array_merge($first,$second,$third);
     }
 
     public function getScoreForSelector($selector)
@@ -311,13 +308,8 @@ class InlineStyle
     private function _mergeStyles(array $styleA, array $styleB)
     {
         foreach($styleB as $prop => $val) {
-            if(!isset($styleA[$prop])
-                || substr(str_replace(" ", "", strtolower($val)), -10) == "!important")
-            {
-                $styleA[$prop] = $val;
-            }
+            $styleA[$prop] = $val;
         }
-
         return $styleA;
     }
 
