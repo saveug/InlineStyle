@@ -134,13 +134,20 @@ class InlineStyle
             $style = $this->_styleToArray($style);
 
             foreach($nodes as $node) {
+                if ( $node->hasAttribute("style") && !$node->hasAttribute("nativestyle") ) {
+                    $node->setAttribute("nativestyle", $node->getAttribute("style"));
+                }
                 $current = $node->hasAttribute("style") ?
                     $this->_styleToArray($node->getAttribute("style")) :
                     array();
 
                 $current = $this->_mergeStyles($current, $style);
-                $st = array();
 
+                if ( $node->hasAttribute("nativestyle") ) {
+                    $current = $this->_mergeStyles($current, $this->_styleToArray($node->getAttribute("nativestyle")));
+                }
+
+                $st = array();
                 foreach($current as $prop => $val) {
                     $st[] = "{$prop}:{$val}";
                 }
