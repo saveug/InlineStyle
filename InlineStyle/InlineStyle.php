@@ -133,10 +133,12 @@ class InlineStyle
             $nodes = $this->_getNodesForCssSelector($selector);
             $style = $this->_styleToArray($style);
 
-            foreach($nodes as $node) {
-                if ( $node->hasAttribute("style") && !$node->hasAttribute("nativestyle") ) {
+            foreach($nodes as $node)
+            {
+                if ( !$node->hasAttribute("nativestyle") ) {
                     $node->setAttribute("nativestyle", $node->getAttribute("style"));
                 }
+
                 $current = $node->hasAttribute("style") ?
                     $this->_styleToArray($node->getAttribute("style")) :
                     array();
@@ -247,8 +249,8 @@ class InlineStyle
         $stylesheet = trim(trim($stylesheet), "}");
         foreach(explode("}", $stylesheet) as $rule) {
             //Don't parse empty rules
-        	if(!trim($rule))continue;
-        	list($selector, $style) = explode("{", $rule, 2);
+            if(!trim($rule))continue;
+            list($selector, $style) = explode("{", $rule, 2);
             foreach (explode(',', $selector) as $sel) {
                 $parsed[] = array(trim($sel), trim(trim($style), ";"));
             }
@@ -273,6 +275,19 @@ class InlineStyle
         return array_merge($first,$second,$third);
     }
 
+    private function sortOnSpecificity($a, $b)
+    {
+        $a = $this->getScoreForSelector($a[0]);
+        $b = $this->getScoreForSelector($b[0]);
+
+        foreach (range(0, 2) as $i) {
+            if ($a[$i] !== $b[$i]) {
+                return $a[$i] < $b[$i] ? -1 : 1;
+            }
+        }
+        return 0;
+    }
+
     public function getScoreForSelector($selector)
     {
         return array(
@@ -292,7 +307,7 @@ class InlineStyle
         $styles = array();
         $style = trim(trim($style), ";");
         if($style) {
-	    $style = preg_replace('/\n/', ' ', $style);
+            $style = preg_replace('/\n/', ' ', $style);
             foreach(explode(";", $style) as $props) {
                 $props = trim(trim($props), ";");
                 //Don't parse empty props
@@ -324,7 +339,7 @@ class InlineStyle
     {
         // strip comments
         $s = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!','', $s);
-        
+
         // strip keyframes rules
         $s = preg_replace('/@(-|keyframes).*?\{.*?\}[ \r\n]*\}/s', '', $s);
 
