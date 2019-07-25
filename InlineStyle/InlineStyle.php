@@ -26,7 +26,7 @@ namespace InlineStyle;
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-use Symfony\Component\CssSelector\CssSelector;
+use Symfony\Component\CssSelector\CssSelectorConverter;
 use Symfony\Component\CssSelector\Exception\ParseException;
 
 /**
@@ -111,7 +111,8 @@ class InlineStyle
     private function _getNodesForCssSelector($sel)
     {
         try {
-            $xpathQuery = CssSelector::toXPath($sel);
+            $converter = new CssSelectorConverter();
+            $xpathQuery = $converter->toXPath($sel);
             return $this->_dom_xpath->query($xpathQuery);
         }
         catch(ParseException $e) {
